@@ -1,607 +1,556 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080808">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>ONL1NE BROWSER</title>
+<title>ONL1NE BROWSER ULTRA</title>
 
 <style>
-:root {
-  --red:#ff1838;
-  --bg:#080808;
-  --panel:#151515;
-  --panel2:#202020;
-  --text:#fff;
-  --muted:#999;
+:root{
+ --red:#ff1838;--bg:#080808;--panel:#151515;
+ --panel2:#222;--txt:#fff;--muted:#999;
 }
-* {box-sizing:border-box}
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  min-height:100vh;
-  padding-bottom:90px;
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--bg);color:var(--txt);
+ font-family:Arial,sans-serif;padding-bottom:95px;
 }
-header {
-  padding:22px 18px 15px;
-  border-bottom:1px solid #292929;
-  background:#090909;
+body.red{--red:#ff1838}
+body.blue{--red:#168cff}
+body.purple{--red:#a855f7}
+body.green{--red:#16c784}
+header{
+ padding:20px 17px 14px;background:#090909;
+ border-bottom:1px solid #292929;
 }
-.logo {
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:2px;
+.logo{font-size:25px;font-weight:900;letter-spacing:3px}
+.logo span,.hero h1 span{color:var(--red)}
+.subtitle{font-size:10px;color:#999;letter-spacing:3px;margin-top:5px}
+.status{font-size:11px;color:#aaa;margin-top:12px}
+main{max-width:700px;margin:auto;padding:16px}
+.page{display:none}
+.page.active{display:block}
+.hero{
+ text-align:center;padding:25px 14px;
+ border:1px solid #42101c;border-radius:17px;
+ background:linear-gradient(145deg,#260912,#100d0e,#080808);
 }
-.logo span {color:var(--red)}
-.subtitle {
-  color:var(--muted);
-  font-size:10px;
-  letter-spacing:3px;
-  margin-top:5px;
+.hero h1{font-size:29px;letter-spacing:2px;margin:0}
+.hero p{font-size:12px;color:#aaa}
+.search{display:flex;gap:7px;margin-top:18px}
+input,select{
+ width:100%;padding:13px;margin:6px 0;
+ background:#080808;color:white;border:1px solid #444;
+ border-radius:9px;font-size:14px;
 }
-.status {
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:#aaa;
-  font-size:11px;
-  margin-top:14px;
+.search input{flex:1;min-width:0}
+button{
+ color:white;background:#252525;border:1px solid #393939;
+ border-radius:9px;padding:12px;font-weight:bold;
+ cursor:pointer;
 }
-.dot {
-  width:7px;height:7px;border-radius:50%;
-  background:#22d36b;
-  box-shadow:0 0 9px #22d36b;
+button:active{border-color:var(--red)}
+.search button,.primary{background:var(--red);border-color:var(--red)}
+.section-title{
+ font-size:12px;letter-spacing:2px;color:#aaa;
+ margin:23px 0 11px;
 }
-main {padding:18px;max-width:700px;margin:auto}
-.hero {
-  padding:28px 18px;
-  border:1px solid #3b1019;
-  border-radius:17px;
-  background:linear-gradient(145deg,#1c090e,#100d0e 65%,#080808);
-  text-align:center;
-  margin-bottom:20px;
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.tile{
+ min-height:78px;background:var(--panel);
+ border:1px solid #292929;border-radius:12px;
+ padding:12px 5px;text-align:center;width:100%;
 }
-.hero h1 {
-  font-size:29px;
-  margin:0;
-  letter-spacing:2px;
+.symbol{font-size:22px}
+.name{font-size:11px;margin-top:7px}
+.panel{
+ background:var(--panel);border:1px solid #292929;
+ border-radius:13px;padding:14px;margin:11px 0;
 }
-.hero h1 span {color:var(--red)}
-.hero p {color:#aaa;font-size:12px}
-.search {
-  display:flex;
-  gap:8px;
-  margin-top:20px;
+.panel h3{font-size:14px;margin:0 0 9px}
+.muted{font-size:12px;color:var(--muted);line-height:1.5}
+.action{display:block;width:100%;text-align:left;margin-top:8px}
+.row{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:8px;padding:11px 0;border-bottom:1px solid #303030;
+ font-size:12px;overflow-wrap:anywhere;
 }
-.search input {
-  min-width:0;
-  flex:1;
-  padding:16px 13px;
-  border:1px solid #444;
-  border-radius:10px;
-  background:#080808;
-  color:white;
-  font-size:14px;
-  outline:none;
+.row:last-child{border:0}
+.row button{padding:8px;font-size:10px}
+.row-actions{display:flex;gap:5px;flex-shrink:0}
+.bottom{
+ position:fixed;bottom:0;left:0;right:0;z-index:5;
+ display:flex;justify-content:space-around;
+ background:#101010;border-top:1px solid #333;
+ padding:8px 3px calc(8px + env(safe-area-inset-bottom));
 }
-.search input:focus {border-color:var(--red)}
-button {
-  border:0;
-  cursor:pointer;
-  color:white;
-  font-weight:bold;
-}
-.search button {
-  background:var(--red);
-  border-radius:10px;
-  padding:0 17px;
-}
-.section-title {
-  font-size:12px;
-  letter-spacing:2px;
-  color:#aaa;
-  margin:25px 0 12px;
-}
-.grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-.tile {
-  background:var(--panel);
-  border:1px solid #292929;
-  border-radius:12px;
-  padding:16px 8px;
-  text-align:center;
-  min-height:83px;
-}
-.tile:active {border-color:var(--red)}
-.tile .symbol {font-size:23px}
-.tile .name {font-size:11px;margin-top:8px}
-.panel {
-  background:var(--panel);
-  border:1px solid #292929;
-  border-radius:13px;
-  padding:15px;
-  margin-bottom:12px;
-}
-.panel h3 {font-size:14px;margin:0 0 10px}
-.muted {color:var(--muted);font-size:12px;line-height:1.5}
-.action {
-  width:100%;
-  padding:13px;
-  background:#242424;
-  border:1px solid #393939;
-  border-radius:9px;
-  text-align:left;
-  margin-top:8px;
-  font-size:13px;
-}
-.action:active {border-color:var(--red)}
-.red {background:#a90020;border-color:var(--red)}
-.item {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  padding:12px 0;
-  border-bottom:1px solid #303030;
-  font-size:12px;
-}
-.item:last-child {border:0}
-.item button {
-  background:#292929;
-  padding:8px 10px;
-  border-radius:7px;
-}
-.bottom {
-  position:fixed;
-  bottom:0;left:0;right:0;
-  background:#101010;
-  border-top:1px solid #333;
-  display:flex;
-  justify-content:space-around;
-  padding:10px 4px calc(10px + env(safe-area-inset-bottom));
-  z-index:5;
-}
-.nav {
-  background:transparent;
-  color:#888;
-  font-size:10px;
-  padding:7px 5px;
-}
-.nav span {display:block;font-size:19px;margin-bottom:4px}
-.nav.active {color:var(--red)}
-.page {display:none}
-.page.active {display:block}
-input[type="text"],select {
-  width:100%;
-  background:#080808;
-  color:white;
-  border:1px solid #444;
-  border-radius:8px;
-  padding:12px;
-  margin:7px 0;
-}
-hr {border:0;border-top:1px solid #333;margin:15px 0}
-footer {
-  text-align:center;
-  color:#555;
-  font-size:10px;
-  padding:20px;
-}
+.nav{background:transparent;border:0;color:#888;padding:6px 4px;font-size:10px}
+.nav span{display:block;font-size:19px;margin-bottom:3px}
+.nav.active{color:var(--red)}
+.small{font-size:10px;color:#888}
+.danger{background:#790018;border-color:var(--red)}
+.badge{font-size:10px;color:var(--red)}
+footer{text-align:center;color:#555;font-size:10px;padding:20px}
 </style>
 </head>
 
 <body>
-
 <header>
-  <div class="logo">ONL<span>1</span>NE</div>
-  <div class="subtitle">BROWSER • YOUR DIGITAL SPACE</div>
-  <div class="status"><span class="dot"></span> SISTEMA ATIVO</div>
+ <div class="logo">ONL<span>1</span>NE</div>
+ <div class="subtitle">BROWSER • ULTRA EDITION</div>
+ <div class="status">● SISTEMA ON-LINE</div>
 </header>
 
 <main>
 
-<!-- INÍCIO -->
 <section id="home" class="page active">
-  <div class="hero">
-    <h1>ONL<span>1</span>NE</h1>
-    <p>Seu espaço. Sua navegação. Seu controle.</p>
-    <div class="search">
-      <input id="searchInput" type="text"
-        placeholder="Pesquisar ou digitar um endereço"
-        enterkeyhint="go">
-      <button onclick="searchWeb()">IR</button>
-    </div>
+ <div class="hero">
+  <h1>ONL<span>1</span>NE</h1>
+  <p>Sua navegação. Seu espaço. Seu controle.</p>
+  <div class="search">
+   <input id="searchInput" placeholder="Pesquisar ou digitar endereço" enterkeyhint="go">
+   <button onclick="searchWeb()">IR</button>
   </div>
+ </div>
 
-  <div class="section-title">ACESSO RÁPIDO</div>
-  <div class="grid">
-    <button class="tile" onclick="openSite('https://www.google.com')">
-      <div class="symbol">🔎</div><div class="name">Google</div>
-    </button>
-    <button class="tile" onclick="openSite('https://www.youtube.com')">
-      <div class="symbol">▶️</div><div class="name">YouTube</div>
-    </button>
-    <button class="tile" onclick="openSite('https://www.wikipedia.org')">
-      <div class="symbol">🌐</div><div class="name">Wikipedia</div>
-    </button>
-    <button class="tile" onclick="openSite('https://www.github.com')">
-      <div class="symbol">💻</div><div class="name">GitHub</div>
-    </button>
-    <button class="tile" onclick="openSite('https://www.google.com/maps')">
-      <div class="symbol">📍</div><div class="name">Mapas</div>
-    </button>
-    <button class="tile" onclick="showPage('games')">
-      <div class="symbol">🎮</div><div class="name">Jogos</div>
-    </button>
-  </div>
+ <div class="section-title">ACESSO RÁPIDO</div>
+ <div class="grid">
+  <button class="tile" onclick="openSite('https://google.com','Google')"><div class="symbol">🔎</div><div class="name">Google</div></button>
+  <button class="tile" onclick="openSite('https://youtube.com','YouTube')"><div class="symbol">▶️</div><div class="name">YouTube</div></button>
+  <button class="tile" onclick="openSite('https://wikipedia.org','Wikipedia')"><div class="symbol">🌐</div><div class="name">Wikipedia</div></button>
+  <button class="tile" onclick="openSite('https://github.com','GitHub')"><div class="symbol">💻</div><div class="name">GitHub</div></button>
+  <button class="tile" onclick="openSite('https://maps.google.com','Mapas')"><div class="symbol">📍</div><div class="name">Mapas</div></button>
+  <button class="tile" onclick="showPage('games')"><div class="symbol">🎮</div><div class="name">Jogos</div></button>
+ </div>
 
-  <div class="section-title">SEU NAVEGADOR</div>
-  <div class="panel">
-    <h3>Bem-vindo ao ONL1NE</h3>
-    <p class="muted">Pesquise na internet, salve seus sites favoritos e organize seu espaço digital.</p>
-    <button class="action" onclick="showPage('bookmarks')">★ Meus favoritos</button>
-    <button class="action" onclick="showPage('history')">◷ Histórico de navegação</button>
-  </div>
+ <div class="section-title">CENTRAL DO NAVEGADOR</div>
+ <div class="panel">
+  <button class="action" onclick="showPage('tabs')">▣ Minhas abas</button>
+  <button class="action" onclick="showPage('bookmarks')">★ Favoritos e pastas</button>
+  <button class="action" onclick="showPage('downloads')">⬇ Gerenciador de downloads</button>
+  <button class="action" onclick="showPage('privacy')">🔒 Modo privado e proteção</button>
+ </div>
 </section>
 
-<!-- FAVORITOS -->
+<section id="tabs" class="page">
+ <div class="section-title">▣ SISTEMA DE ABAS</div>
+ <div class="panel">
+  <h3>Abrir nova aba</h3>
+  <input id="tabName" placeholder="Nome da página">
+  <input id="tabUrl" placeholder="Endereço do site">
+  <button class="action primary" onclick="addTab()">+ ADICIONAR ABA</button>
+  <p class="muted">As abas guardam seus endereços para alternar entre páginas. O iPhone abre os sites no navegador do sistema.</p>
+ </div>
+ <div class="panel">
+  <h3>Suas abas</h3>
+  <div id="tabList"></div>
+ </div>
+</section>
+
 <section id="bookmarks" class="page">
-  <div class="section-title">★ MEUS FAVORITOS</div>
-  <div class="panel">
-    <h3>Salvar novo favorito</h3>
-    <input id="favName" type="text" placeholder="Nome do site">
-    <input id="favUrl" type="text" placeholder="Endereço (ex: https://...)">
-    <button class="action red" onclick="addBookmark()">SALVAR FAVORITO</button>
-  </div>
-  <div class="panel" id="bookmarkList"></div>
+ <div class="section-title">★ CENTRAL DE FAVORITOS</div>
+ <div class="panel">
+  <h3>Novo favorito</h3>
+  <input id="favName" placeholder="Nome do site">
+  <input id="favUrl" placeholder="Endereço do site">
+  <input id="favFolder" placeholder="Pasta (ex.: Jogos, Vídeos, Trabalho)">
+  <button class="action primary" onclick="addBookmark()">SALVAR FAVORITO</button>
+ </div>
+ <div class="panel">
+  <h3>Seus favoritos</h3>
+  <div id="bookmarkList"></div>
+ </div>
 </section>
 
-<!-- HISTÓRICO -->
 <section id="history" class="page">
-  <div class="section-title">◷ HISTÓRICO</div>
-  <div class="panel">
-    <div id="historyList"></div>
-    <button class="action red" onclick="clearHistory()">LIMPAR HISTÓRICO</button>
-  </div>
+ <div class="section-title">◷ HISTÓRICO</div>
+ <div class="panel">
+  <div id="historyList"></div>
+  <button class="action danger" onclick="clearHistory()">LIMPAR HISTÓRICO</button>
+ </div>
 </section>
 
-<!-- JOGOS -->
-<section id="games" class="page">
-  <div class="section-title">🎮 CENTRAL DE JOGOS</div>
-  <div class="panel">
-    <h3>Área gamer</h3>
-    <p class="muted">Acesse seus jogos e organize seus atalhos. O navegador não altera controles de outros aplicativos.</p>
-    <button class="action" onclick="openSite('https://www.crazygames.com')">🎮 Jogos online</button>
-    <button class="action" onclick="openSite('https://www.roblox.com')">🧱 Roblox</button>
-    <button class="action" onclick="openSite('https://store.steampowered.com')">🖥️ Steam</button>
-  </div>
-  <div class="panel">
-    <h3>Perfil gamer</h3>
-    <input id="gameName" type="text" placeholder="Nome do seu perfil">
-    <button class="action red" onclick="saveGameName()">SALVAR PERFIL</button>
-    <p class="muted" id="gameProfile"></p>
-  </div>
+<section id="downloads" class="page">
+ <div class="section-title">⬇ GERENCIADOR DE DOWNLOADS</div>
+ <div class="panel">
+  <h3>Registrar um download</h3>
+  <input id="downloadName" placeholder="Nome do arquivo">
+  <input id="downloadUrl" placeholder="Link direto do arquivo">
+  <button class="action primary" onclick="startDownload()">BAIXAR ARQUIVO</button>
+  <p class="muted">O iPhone pode abrir a tela de download ou visualização do Safari. O ONL1NE só consegue registrar os downloads iniciados por esta página; não consegue ler todos os downloads do aparelho.</p>
+ </div>
+ <div class="panel">
+  <h3>Downloads registrados</h3>
+  <div id="downloadList"></div>
+ </div>
 </section>
 
-<!-- PERFIL -->
-<section id="profile" class="page">
-  <div class="section-title">👤 MEU PERFIL</div>
-  <div class="panel">
-    <h3>Personalizar navegador</h3>
-    <input id="profileName" type="text" placeholder="Seu nome ou apelido">
-    <button class="action red" onclick="saveProfile()">SALVAR PERFIL</button>
-    <p class="muted" id="profileMessage"></p>
-  </div>
-  <div class="panel">
-    <h3>Identidade</h3>
-    <p class="muted">ONL1NE BROWSER<br>Interface preta e vermelha<br>Versão 1.0</p>
-  </div>
-</section>
-
-<!-- PRIVACIDADE -->
 <section id="privacy" class="page">
-  <div class="section-title">🔒 PRIVACIDADE E CONTROLE</div>
-  <div class="panel">
-    <h3>Seus dados neste navegador</h3>
-    <p class="muted">Favoritos, histórico e perfil são armazenados localmente neste navegador usando o armazenamento do dispositivo.</p>
-    <button class="action" onclick="clearHistory()">APAGAR HISTÓRICO</button>
-    <button class="action red" onclick="clearAllData()">APAGAR DADOS LOCAIS DO ONL1NE</button>
-  </div>
-  <div class="panel">
-    <h3>Limites de privacidade</h3>
-    <p class="muted">Este painel não bloqueia todos os rastreadores, não oculta seu endereço IP e não substitui uma VPN. Sites externos têm suas próprias políticas de privacidade.</p>
-  </div>
+ <div class="section-title">🔒 PRIVACIDADE</div>
+ <div class="panel">
+  <h3>Modo privado local</h3>
+  <p class="muted">Quando ativado, o ONL1NE não registra novas visitas no histórico local.</p>
+  <button id="privateButton" class="action primary" onclick="togglePrivate()">ATIVAR MODO PRIVADO</button>
+  <p id="privateStatus" class="badge"></p>
+ </div>
+ <div class="panel">
+  <h3>Proteção web limitada</h3>
+  <p class="muted">O ONL1NE pode bloquear alguns domínios conhecidos quando você tenta abri-los por esta página. Isso não filtra todo o conteúdo de sites externos nem substitui um bloqueador de conteúdo do iPhone.</p>
+  <button class="action" onclick="toggleProtection()">ALTERAR PROTEÇÃO</button>
+  <p id="protectionStatus" class="badge"></p>
+ </div>
+ <div class="panel">
+  <h3>Dados locais</h3>
+  <button class="action" onclick="clearHistory()">APAGAR HISTÓRICO</button>
+  <button class="action danger" onclick="clearAllData()">APAGAR DADOS DO ONL1NE</button>
+ </div>
+ <div class="panel">
+  <h3>Bloqueio por Face ID</h3>
+  <p class="muted">O bloqueio facial seguro ainda não está ativado nesta versão. Para implementá-lo corretamente, será necessário configurar passkeys com validação segura em servidor ou criar a versão nativa para iPhone. Não armazene fotos do rosto nem use um botão falso de desbloqueio.</p>
+ </div>
 </section>
 
-<!-- CONFIGURAÇÕES -->
+<section id="games" class="page">
+ <div class="section-title">🎮 CENTRAL GAMER</div>
+ <div class="grid">
+  <button class="tile" onclick="openSite('https://www.crazygames.com','CrazyGames')"><div class="symbol">🎮</div><div class="name">CrazyGames</div></button>
+  <button class="tile" onclick="openSite('https://www.roblox.com','Roblox')"><div class="symbol">🧱</div><div class="name">Roblox</div></button>
+  <button class="tile" onclick="openSite('https://store.steampowered.com','Steam')"><div class="symbol">🖥️</div><div class="name">Steam</div></button>
+ </div>
+ <div class="panel">
+  <h3>Meu perfil gamer</h3>
+  <input id="gameName" placeholder="Nome do perfil">
+  <button class="action primary" onclick="saveGameName()">SALVAR PERFIL</button>
+  <p id="gameProfile" class="muted"></p>
+ </div>
+ <div class="panel">
+  <p class="muted">A central organiza atalhos e perfis. Ela não altera os controles de jogos instalados nem injeta comandos em outros aplicativos.</p>
+ </div>
+</section>
+
+<section id="profile" class="page">
+ <div class="section-title">👤 MEU PERFIL</div>
+ <div class="panel">
+  <h3>Personalização</h3>
+  <input id="profileName" placeholder="Seu nome ou apelido">
+  <button class="action primary" onclick="saveProfile()">SALVAR NOME</button>
+  <p id="profileMessage" class="muted"></p>
+ </div>
+ <div class="panel">
+  <h3>Escolher tema</h3>
+  <select id="themeSelect" onchange="changeTheme(this.value)">
+   <option value="red">Vermelho ONL1NE</option>
+   <option value="blue">Azul</option>
+   <option value="purple">Roxo</option>
+   <option value="green">Verde</option>
+  </select>
+ </div>
+</section>
+
 <section id="settings" class="page">
-  <div class="section-title">⚙️ CONFIGURAÇÕES</div>
-  <div class="panel">
-    <h3>Configurações gerais</h3>
-    <button class="action" onclick="showPage('home')">Voltar ao início</button>
-    <button class="action" onclick="showPage('profile')">Editar perfil</button>
-    <button class="action" onclick="showPage('privacy')">Privacidade</button>
-  </div>
-  <div class="panel">
-    <h3>Sobre o ONL1NE</h3>
-    <p class="muted">Uma experiência personalizada de navegação, criada para funcionar no iPhone como uma aplicação web.</p>
-  </div>
+ <div class="section-title">⚙️ CONFIGURAÇÕES</div>
+ <div class="panel">
+  <button class="action" onclick="showPage('profile')">Personalização e temas</button>
+  <button class="action" onclick="showPage('privacy')">Privacidade e segurança</button>
+  <button class="action" onclick="showPage('downloads')">Downloads</button>
+  <button class="action" onclick="showPage('tabs')">Gerenciar abas</button>
+  <button class="action" onclick="showPage('games')">Central gamer</button>
+ </div>
+ <div class="panel">
+  <h3>ONL1NE BROWSER ULTRA</h3>
+  <p class="muted">Versão web personalizada para iPhone.</p>
+ </div>
 </section>
 
 </main>
 
 <nav class="bottom">
-  <button class="nav active" data-page="home" onclick="showPage('home')"><span>⌂</span>Início</button>
-  <button class="nav" data-page="bookmarks" onclick="showPage('bookmarks')"><span>★</span>Favoritos</button>
-  <button class="nav" data-page="history" onclick="showPage('history')"><span>◷</span>Histórico</button>
-  <button class="nav" data-page="games" onclick="showPage('games')"><span>🎮</span>Jogos</button>
-  <button class="nav" data-page="settings" onclick="showPage('settings')"><span>⚙</span>Ajustes</button>
+ <button class="nav active" data-page="home" onclick="showPage('home')"><span>⌂</span>Início</button>
+ <button class="nav" data-page="tabs" onclick="showPage('tabs')"><span>▣</span>Abas</button>
+ <button class="nav" data-page="bookmarks" onclick="showPage('bookmarks')"><span>★</span>Favoritos</button>
+ <button class="nav" data-page="games" onclick="showPage('games')"><span>🎮</span>Jogos</button>
+ <button class="nav" data-page="settings" onclick="showPage('settings')"><span>⚙</span>Ajustes</button>
 </nav>
 
-<footer>ONL1NE BROWSER • FEITO PARA VOCÊ</footer>
+<footer>ONL1NE BROWSER • ULTRA EDITION</footer>
 
 <script>
-const getData = (key, fallback) => {
-  try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
-  } catch (e) {
-    return fallback;
-  }
+const getData=(k,d)=>{
+ try{return JSON.parse(localStorage.getItem(k))??d}
+ catch(e){return d}
 };
-
-const saveData = (key, value) => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (e) {
-    alert("Não foi possível salvar. Verifique o armazenamento do navegador.");
-  }
+const saveData=(k,v)=>{
+ try{localStorage.setItem(k,JSON.stringify(v))}
+ catch(e){alert("Não foi possível salvar os dados neste aparelho.")}
 };
+let privateMode=getData("onl_private",false);
+let protection=getData("onl_protection",true);
 
-function showPage(page) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".nav").forEach(b => b.classList.remove("active"));
-
-  const target = document.getElementById(page);
-  if (target) target.classList.add("active");
-
-  const nav = document.querySelector('[data-page="' + page + '"]');
-  if (nav) nav.classList.add("active");
-
-  if (page === "bookmarks") renderBookmarks();
-  if (page === "history") renderHistory();
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.querySelectorAll(".nav").forEach(b=>b.classList.remove("active"));
+ const page=document.getElementById(id);
+ if(page)page.classList.add("active");
+ const nav=document.querySelector('[data-page="'+id+'"]');
+ if(nav)nav.classList.add("active");
+ if(id==="tabs")renderTabs();
+ if(id==="bookmarks")renderBookmarks();
+ if(id==="history")renderHistory();
+ if(id==="downloads")renderDownloads();
 }
 
-function normalizeAddress(value) {
-  let address = value.trim();
-  if (!address) return "";
+function normalizeAddress(value){
+ let v=value.trim();
+ if(!v)return "";
+ if(/^https?:\/\//i.test(v))return v;
+ if(/^[^\s]+\.[a-z]{2,}([/:?#].*)?$/i.test(v))return "https://"+v;
+ return "https://www.google.com/search?q="+encodeURIComponent(v);
+}
 
-  if (/^https?:\/\//i.test(address)) return address;
+function blockedAddress(url){
+ const blocked=[
+  "doubleclick.net","googlesyndication.com",
+  "google-analytics.com","googletagmanager.com",
+  "adservice.google.com","facebook.net"
+ ];
+ try{
+  const host=new URL(url).hostname.toLowerCase();
+  return blocked.some(domain=>host===domain||host.endsWith("."+domain));
+ }catch(e){return true}
+}
 
-  if (/^[^\s]+\.[a-z]{2,}([/:?#].*)?$/i.test(address)) {
-    return "https://" + address;
+function openSite(url,title){
+ const address=normalizeAddress(url);
+ if(!address)return;
+ try{
+  const parsed=new URL(address);
+  if(!["http:","https:"].includes(parsed.protocol)){
+   alert("Endereço não permitido.");return;
   }
+ }catch(e){alert("Endereço inválido.");return}
 
-  return "https://www.google.com/search?q=" + encodeURIComponent(address);
+ if(protection&&blockedAddress(address)){
+  alert("Este endereço foi bloqueado pela proteção limitada do ONL1NE.");
+  return;
+ }
+
+ if(!privateMode){
+  let h=getData("onl_history",[]);
+  h.unshift({title:title||address,url:address,date:new Date().toLocaleString("pt-BR")});
+  saveData("onl_history",h.slice(0,100));
+ }
+ const opened=window.open(address,"_blank");
+ if(!opened)window.location.href=address;
 }
 
-function searchWeb() {
-  const input = document.getElementById("searchInput");
-  const value = input.value.trim();
-
-  if (!value) {
-    input.focus();
-    return;
-  }
-
-  openSite(normalizeAddress(value), value);
+function searchWeb(){
+ const input=document.getElementById("searchInput");
+ if(!input.value.trim()){input.focus();return}
+ openSite(normalizeAddress(input.value),input.value.trim());
 }
-
-document.getElementById("searchInput").addEventListener("keydown", e => {
-  if (e.key === "Enter") searchWeb();
+document.getElementById("searchInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter")searchWeb();
 });
 
-function openSite(url, title) {
-  const address = normalizeAddress(url);
-  if (!address) return;
+/* ABAS */
+function addTab(){
+ const name=document.getElementById("tabName").value.trim();
+ const raw=document.getElementById("tabUrl").value.trim();
+ if(!name||!raw){alert("Informe o nome e o endereço.");return}
+ const url=normalizeAddress(raw);
+ let tabs=getData("onl_tabs",[]);
+ tabs.push({name,url});
+ saveData("onl_tabs",tabs);
+ document.getElementById("tabName").value="";
+ document.getElementById("tabUrl").value="";
+ renderTabs();
+}
+function renderTabs(){
+ const box=document.getElementById("tabList");
+ const tabs=getData("onl_tabs",[]);
+ box.innerHTML="";
+ if(!tabs.length){box.textContent="Nenhuma aba adicionada.";return}
+ tabs.forEach((t,i)=>{
+  const row=document.createElement("div");row.className="row";
+  const label=document.createElement("span");label.textContent="▣ "+t.name;
+  const actions=document.createElement("div");actions.className="row-actions";
+  const open=document.createElement("button");open.textContent="ABRIR";
+  open.onclick=()=>openSite(t.url,t.name);
+  const del=document.createElement("button");del.textContent="✕";
+  del.onclick=()=>{tabs.splice(i,1);saveData("onl_tabs",tabs);renderTabs()};
+  actions.append(open,del);row.append(label,actions);box.append(row);
+ });
+}
 
-  try {
-    const parsed = new URL(address);
-    if (!["http:", "https:"].includes(parsed.protocol)) {
-      alert("Endereço não permitido.");
-      return;
-    }
-  } catch (e) {
-    alert("Endereço inválido.");
-    return;
-  }
-
-  let history = getData("onl_history", []);
-  history.unshift({
-    title: title || address,
-    url: address,
-    date: new Date().toLocaleString("pt-BR")
+/* FAVORITOS E PASTAS */
+function addBookmark(){
+ const name=document.getElementById("favName").value.trim();
+ const raw=document.getElementById("favUrl").value.trim();
+ const folder=document.getElementById("favFolder").value.trim()||"Geral";
+ if(!name||!raw){alert("Preencha o nome e o endereço.");return}
+ const url=normalizeAddress(raw);
+ let list=getData("onl_favorites",[]);
+ if(list.some(x=>x.url===url)){alert("Esse favorito já existe.");return}
+ list.push({name,url,folder});
+ saveData("onl_favorites",list);
+ ["favName","favUrl","favFolder"].forEach(id=>document.getElementById(id).value="");
+ renderBookmarks();
+}
+function renderBookmarks(){
+ const box=document.getElementById("bookmarkList");
+ const list=getData("onl_favorites",[]);
+ box.innerHTML="";
+ if(!list.length){box.textContent="Nenhum favorito salvo.";return}
+ const folders=[...new Set(list.map(x=>x.folder||"Geral"))];
+ folders.forEach(folder=>{
+  const heading=document.createElement("h3");heading.textContent="📁 "+folder;
+  box.append(heading);
+  list.forEach((item,index)=>{
+   if((item.folder||"Geral")!==folder)return;
+   const row=document.createElement("div");row.className="row";
+   const label=document.createElement("span");label.textContent=item.name;
+   const actions=document.createElement("div");actions.className="row-actions";
+   const open=document.createElement("button");open.textContent="ABRIR";
+   open.onclick=()=>openSite(item.url,item.name);
+   const del=document.createElement("button");del.textContent="✕";
+   del.onclick=()=>{
+    let current=getData("onl_favorites",[]);
+    current.splice(index,1);saveData("onl_favorites",current);renderBookmarks();
+   };
+   actions.append(open,del);row.append(label,actions);box.append(row);
   });
-
-  history = history.slice(0, 100);
-  saveData("onl_history", history);
-
-  const opened = window.open(address, "_blank");
-
-  if (!opened) {
-    window.location.href = address;
-  }
+ });
 }
 
-function addBookmark() {
-  const name = document.getElementById("favName").value.trim();
-  const rawUrl = document.getElementById("favUrl").value.trim();
-
-  if (!name || !rawUrl) {
-    alert("Digite o nome e o endereço do site.");
-    return;
-  }
-
-  const url = normalizeAddress(rawUrl);
-  let favorites = getData("onl_favorites", []);
-
-  if (favorites.some(f => f.url === url)) {
-    alert("Este site já está nos favoritos.");
-    return;
-  }
-
-  favorites.push({name, url});
-  saveData("onl_favorites", favorites);
-
-  document.getElementById("favName").value = "";
-  document.getElementById("favUrl").value = "";
-
-  renderBookmarks();
-  alert("Favorito salvo!");
+/* HISTÓRICO */
+function renderHistory(){
+ const box=document.getElementById("historyList");
+ const list=getData("onl_history",[]);
+ box.innerHTML="";
+ if(!list.length){box.textContent="Nenhuma visita registrada.";return}
+ list.forEach(item=>{
+  const row=document.createElement("div");row.className="row";
+  const label=document.createElement("span");
+  label.textContent=item.title+" — "+item.date;
+  const open=document.createElement("button");open.textContent="ABRIR";
+  open.onclick=()=>openSite(item.url,item.title);
+  row.append(label,open);box.append(row);
+ });
+}
+function clearHistory(){
+ if(!confirm("Apagar todo o histórico local?"))return;
+ saveData("onl_history",[]);renderHistory();
 }
 
-function renderBookmarks() {
-  const box = document.getElementById("bookmarkList");
-  const favorites = getData("onl_favorites", []);
-
-  if (!favorites.length) {
-    box.innerHTML = '<p class="muted">Seus favoritos aparecerão aqui.</p>';
-    return;
-  }
-
-  box.innerHTML = "";
-
-  favorites.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.className = "item";
-
-    const info = document.createElement("div");
-    info.textContent = item.name;
-
-    const actions = document.createElement("div");
-    const open = document.createElement("button");
-    open.textContent = "ABRIR";
-    open.onclick = () => openSite(item.url, item.name);
-
-    const remove = document.createElement("button");
-    remove.textContent = "✕";
-    remove.style.marginLeft = "5px";
-    remove.onclick = () => removeBookmark(index);
-
-    actions.append(open, remove);
-    row.append(info, actions);
-    box.append(row);
-  });
+/* DOWNLOADS */
+function startDownload(){
+ const name=document.getElementById("downloadName").value.trim()||"Arquivo";
+ const raw=document.getElementById("downloadUrl").value.trim();
+ if(!raw){alert("Digite o link direto do arquivo.");return}
+ const url=normalizeAddress(raw);
+ try{
+  if(!["http:","https:"].includes(new URL(url).protocol))throw 0;
+ }catch(e){alert("Endereço inválido.");return}
+ let list=getData("onl_downloads",[]);
+ list.unshift({name,url,date:new Date().toLocaleString("pt-BR")});
+ saveData("onl_downloads",list);
+ renderDownloads();
+ const a=document.createElement("a");
+ a.href=url;a.target="_blank";a.rel="noopener";
+ a.download=name;
+ document.body.append(a);a.click();a.remove();
+}
+function renderDownloads(){
+ const box=document.getElementById("downloadList");
+ const list=getData("onl_downloads",[]);
+ box.innerHTML="";
+ if(!list.length){box.textContent="Nenhum download registrado.";return}
+ list.forEach((d,i)=>{
+  const row=document.createElement("div");row.className="row";
+  const label=document.createElement("span");label.textContent=d.name+" — "+d.date;
+  const open=document.createElement("button");open.textContent="LINK";
+  open.onclick=()=>openSite(d.url,d.name);
+  const del=document.createElement("button");del.textContent="✕";
+  del.onclick=()=>{
+   let current=getData("onl_downloads",[]);
+   current.splice(i,1);saveData("onl_downloads",current);renderDownloads();
+  };
+  const actions=document.createElement("div");actions.className="row-actions";
+  actions.append(open,del);row.append(label,actions);box.append(row);
+ });
 }
 
-function removeBookmark(index) {
-  let favorites = getData("onl_favorites", []);
-  favorites.splice(index, 1);
-  saveData("onl_favorites", favorites);
-  renderBookmarks();
+/* MODO PRIVADO */
+function togglePrivate(){
+ privateMode=!privateMode;
+ saveData("onl_private",privateMode);
+ updatePrivacy();
+}
+function updatePrivacy(){
+ const b=document.getElementById("privateButton");
+ const s=document.getElementById("privateStatus");
+ b.textContent=privateMode?"DESATIVAR MODO PRIVADO":"ATIVAR MODO PRIVADO";
+ s.textContent=privateMode?"MODO PRIVADO ATIVO":"MODO PRIVADO DESATIVADO";
 }
 
-function renderHistory() {
-  const box = document.getElementById("historyList");
-  const history = getData("onl_history", []);
-
-  if (!history.length) {
-    box.innerHTML = '<p class="muted">Nenhuma navegação registrada ainda.</p>';
-    return;
-  }
-
-  box.innerHTML = "";
-
-  history.forEach(item => {
-    const row = document.createElement("div");
-    row.className = "item";
-
-    const info = document.createElement("div");
-    info.textContent = item.title + " — " + item.date;
-
-    const open = document.createElement("button");
-    open.textContent = "ABRIR";
-    open.onclick = () => openSite(item.url, item.title);
-
-    row.append(info, open);
-    box.append(row);
-  });
+/* PROTEÇÃO LIMITADA */
+function toggleProtection(){
+ protection=!protection;
+ saveData("onl_protection",protection);
+ updateProtection();
+}
+function updateProtection(){
+ document.getElementById("protectionStatus").textContent=
+ protection?"PROTEÇÃO LIMITADA ATIVA":"PROTEÇÃO DESATIVADA";
 }
 
-function clearHistory() {
-  if (!confirm("Deseja apagar todo o histórico do ONL1NE?")) return;
-  saveData("onl_history", []);
-  renderHistory();
-  alert("Histórico apagado.");
+/* PERFIS E TEMA */
+function saveProfile(){
+ const name=document.getElementById("profileName").value.trim();
+ if(!name){alert("Digite um nome.");return}
+ saveData("onl_profile",name);
+ document.getElementById("profileMessage").textContent="Perfil salvo: "+name;
+}
+function saveGameName(){
+ const name=document.getElementById("gameName").value.trim();
+ if(!name){alert("Digite um nome.");return}
+ saveData("onl_game_profile",name);
+ document.getElementById("gameProfile").textContent="Perfil gamer: "+name;
+}
+function changeTheme(theme){
+ document.body.className=theme;
+ saveData("onl_theme",theme);
 }
 
-function saveProfile() {
-  const name = document.getElementById("profileName").value.trim();
-  if (!name) {
-    alert("Digite um nome para o perfil.");
-    return;
-  }
-  saveData("onl_profile", name);
-  document.getElementById("profileMessage").textContent =
-    "Perfil salvo: " + name;
+/* APAGAR DADOS */
+function clearAllData(){
+ if(!confirm("Apagar favoritos, abas, histórico, downloads e perfis?"))return;
+ ["onl_history","onl_favorites","onl_tabs","onl_downloads",
+  "onl_profile","onl_game_profile"].forEach(k=>localStorage.removeItem(k));
+ renderBookmarks();renderTabs();renderHistory();renderDownloads();
+ document.getElementById("profileMessage").textContent="";
+ document.getElementById("gameProfile").textContent="";
+ alert("Dados locais apagados.");
 }
 
-function saveGameName() {
-  const name = document.getElementById("gameName").value.trim();
-  if (!name) {
-    alert("Digite um nome para o perfil gamer.");
-    return;
-  }
-  saveData("onl_game_profile", name);
-  document.getElementById("gameProfile").textContent =
-    "Perfil gamer ativo: " + name;
+/* INICIALIZAÇÃO */
+function initialize(){
+ const theme=getData("onl_theme","red");
+ document.body.className=theme;
+ document.getElementById("themeSelect").value=theme;
+ const profile=getData("onl_profile","");
+ const gamer=getData("onl_game_profile","");
+ document.getElementById("profileName").value=profile;
+ document.getElementById("gameName").value=gamer;
+ if(profile)document.getElementById("profileMessage").textContent="Perfil salvo: "+profile;
+ if(gamer)document.getElementById("gameProfile").textContent="Perfil gamer: "+gamer;
+ renderTabs();renderBookmarks();renderHistory();renderDownloads();
+ updatePrivacy();updateProtection();
 }
-
-function clearAllData() {
-  if (!confirm("Isso apagará favoritos, histórico e perfis salvos no ONL1NE. Continuar?")) return;
-
-  ["onl_history", "onl_favorites", "onl_profile", "onl_game_profile"]
-    .forEach(key => localStorage.removeItem(key));
-
-  renderBookmarks();
-  renderHistory();
-
-  document.getElementById("profileMessage").textContent = "";
-  document.getElementById("gameProfile").textContent = "";
-
-  alert("Dados locais do ONL1NE apagados.");
-}
-
-function loadProfiles() {
-  const profile = getData("onl_profile", "");
-  const gamer = getData("onl_game_profile", "");
-
-  document.getElementById("profileName").value = profile;
-  document.getElementById("gameName").value = gamer;
-
-  if (profile) {
-    document.getElementById("profileMessage").textContent =
-      "Perfil salvo: " + profile;
-  }
-
-  if (gamer) {
-    document.getElementById("gameProfile").textContent =
-      "Perfil gamer ativo: " + gamer;
-  }
-}
-
-loadProfiles();
-renderBookmarks();
-renderHistory();
+initialize();
 </script>
-
 </body>
 </html>
