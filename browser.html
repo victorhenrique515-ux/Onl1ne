@@ -1,1 +1,607 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>ONL1NE BROWSER</title>
+
+<style>
+:root {
+  --red:#ff1838;
+  --bg:#080808;
+  --panel:#151515;
+  --panel2:#202020;
+  --text:#fff;
+  --muted:#999;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+  padding-bottom:90px;
+}
+header {
+  padding:22px 18px 15px;
+  border-bottom:1px solid #292929;
+  background:#090909;
+}
+.logo {
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.logo span {color:var(--red)}
+.subtitle {
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:3px;
+  margin-top:5px;
+}
+.status {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#aaa;
+  font-size:11px;
+  margin-top:14px;
+}
+.dot {
+  width:7px;height:7px;border-radius:50%;
+  background:#22d36b;
+  box-shadow:0 0 9px #22d36b;
+}
+main {padding:18px;max-width:700px;margin:auto}
+.hero {
+  padding:28px 18px;
+  border:1px solid #3b1019;
+  border-radius:17px;
+  background:linear-gradient(145deg,#1c090e,#100d0e 65%,#080808);
+  text-align:center;
+  margin-bottom:20px;
+}
+.hero h1 {
+  font-size:29px;
+  margin:0;
+  letter-spacing:2px;
+}
+.hero h1 span {color:var(--red)}
+.hero p {color:#aaa;font-size:12px}
+.search {
+  display:flex;
+  gap:8px;
+  margin-top:20px;
+}
+.search input {
+  min-width:0;
+  flex:1;
+  padding:16px 13px;
+  border:1px solid #444;
+  border-radius:10px;
+  background:#080808;
+  color:white;
+  font-size:14px;
+  outline:none;
+}
+.search input:focus {border-color:var(--red)}
+button {
+  border:0;
+  cursor:pointer;
+  color:white;
+  font-weight:bold;
+}
+.search button {
+  background:var(--red);
+  border-radius:10px;
+  padding:0 17px;
+}
+.section-title {
+  font-size:12px;
+  letter-spacing:2px;
+  color:#aaa;
+  margin:25px 0 12px;
+}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.tile {
+  background:var(--panel);
+  border:1px solid #292929;
+  border-radius:12px;
+  padding:16px 8px;
+  text-align:center;
+  min-height:83px;
+}
+.tile:active {border-color:var(--red)}
+.tile .symbol {font-size:23px}
+.tile .name {font-size:11px;margin-top:8px}
+.panel {
+  background:var(--panel);
+  border:1px solid #292929;
+  border-radius:13px;
+  padding:15px;
+  margin-bottom:12px;
+}
+.panel h3 {font-size:14px;margin:0 0 10px}
+.muted {color:var(--muted);font-size:12px;line-height:1.5}
+.action {
+  width:100%;
+  padding:13px;
+  background:#242424;
+  border:1px solid #393939;
+  border-radius:9px;
+  text-align:left;
+  margin-top:8px;
+  font-size:13px;
+}
+.action:active {border-color:var(--red)}
+.red {background:#a90020;border-color:var(--red)}
+.item {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #303030;
+  font-size:12px;
+}
+.item:last-child {border:0}
+.item button {
+  background:#292929;
+  padding:8px 10px;
+  border-radius:7px;
+}
+.bottom {
+  position:fixed;
+  bottom:0;left:0;right:0;
+  background:#101010;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 4px calc(10px + env(safe-area-inset-bottom));
+  z-index:5;
+}
+.nav {
+  background:transparent;
+  color:#888;
+  font-size:10px;
+  padding:7px 5px;
+}
+.nav span {display:block;font-size:19px;margin-bottom:4px}
+.nav.active {color:var(--red)}
+.page {display:none}
+.page.active {display:block}
+input[type="text"],select {
+  width:100%;
+  background:#080808;
+  color:white;
+  border:1px solid #444;
+  border-radius:8px;
+  padding:12px;
+  margin:7px 0;
+}
+hr {border:0;border-top:1px solid #333;margin:15px 0}
+footer {
+  text-align:center;
+  color:#555;
+  font-size:10px;
+  padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">ONL<span>1</span>NE</div>
+  <div class="subtitle">BROWSER • YOUR DIGITAL SPACE</div>
+  <div class="status"><span class="dot"></span> SISTEMA ATIVO</div>
+</header>
+
+<main>
+
+<!-- INÍCIO -->
+<section id="home" class="page active">
+  <div class="hero">
+    <h1>ONL<span>1</span>NE</h1>
+    <p>Seu espaço. Sua navegação. Seu controle.</p>
+    <div class="search">
+      <input id="searchInput" type="text"
+        placeholder="Pesquisar ou digitar um endereço"
+        enterkeyhint="go">
+      <button onclick="searchWeb()">IR</button>
+    </div>
+  </div>
+
+  <div class="section-title">ACESSO RÁPIDO</div>
+  <div class="grid">
+    <button class="tile" onclick="openSite('https://www.google.com')">
+      <div class="symbol">🔎</div><div class="name">Google</div>
+    </button>
+    <button class="tile" onclick="openSite('https://www.youtube.com')">
+      <div class="symbol">▶️</div><div class="name">YouTube</div>
+    </button>
+    <button class="tile" onclick="openSite('https://www.wikipedia.org')">
+      <div class="symbol">🌐</div><div class="name">Wikipedia</div>
+    </button>
+    <button class="tile" onclick="openSite('https://www.github.com')">
+      <div class="symbol">💻</div><div class="name">GitHub</div>
+    </button>
+    <button class="tile" onclick="openSite('https://www.google.com/maps')">
+      <div class="symbol">📍</div><div class="name">Mapas</div>
+    </button>
+    <button class="tile" onclick="showPage('games')">
+      <div class="symbol">🎮</div><div class="name">Jogos</div>
+    </button>
+  </div>
+
+  <div class="section-title">SEU NAVEGADOR</div>
+  <div class="panel">
+    <h3>Bem-vindo ao ONL1NE</h3>
+    <p class="muted">Pesquise na internet, salve seus sites favoritos e organize seu espaço digital.</p>
+    <button class="action" onclick="showPage('bookmarks')">★ Meus favoritos</button>
+    <button class="action" onclick="showPage('history')">◷ Histórico de navegação</button>
+  </div>
+</section>
+
+<!-- FAVORITOS -->
+<section id="bookmarks" class="page">
+  <div class="section-title">★ MEUS FAVORITOS</div>
+  <div class="panel">
+    <h3>Salvar novo favorito</h3>
+    <input id="favName" type="text" placeholder="Nome do site">
+    <input id="favUrl" type="text" placeholder="Endereço (ex: https://...)">
+    <button class="action red" onclick="addBookmark()">SALVAR FAVORITO</button>
+  </div>
+  <div class="panel" id="bookmarkList"></div>
+</section>
+
+<!-- HISTÓRICO -->
+<section id="history" class="page">
+  <div class="section-title">◷ HISTÓRICO</div>
+  <div class="panel">
+    <div id="historyList"></div>
+    <button class="action red" onclick="clearHistory()">LIMPAR HISTÓRICO</button>
+  </div>
+</section>
+
+<!-- JOGOS -->
+<section id="games" class="page">
+  <div class="section-title">🎮 CENTRAL DE JOGOS</div>
+  <div class="panel">
+    <h3>Área gamer</h3>
+    <p class="muted">Acesse seus jogos e organize seus atalhos. O navegador não altera controles de outros aplicativos.</p>
+    <button class="action" onclick="openSite('https://www.crazygames.com')">🎮 Jogos online</button>
+    <button class="action" onclick="openSite('https://www.roblox.com')">🧱 Roblox</button>
+    <button class="action" onclick="openSite('https://store.steampowered.com')">🖥️ Steam</button>
+  </div>
+  <div class="panel">
+    <h3>Perfil gamer</h3>
+    <input id="gameName" type="text" placeholder="Nome do seu perfil">
+    <button class="action red" onclick="saveGameName()">SALVAR PERFIL</button>
+    <p class="muted" id="gameProfile"></p>
+  </div>
+</section>
+
+<!-- PERFIL -->
+<section id="profile" class="page">
+  <div class="section-title">👤 MEU PERFIL</div>
+  <div class="panel">
+    <h3>Personalizar navegador</h3>
+    <input id="profileName" type="text" placeholder="Seu nome ou apelido">
+    <button class="action red" onclick="saveProfile()">SALVAR PERFIL</button>
+    <p class="muted" id="profileMessage"></p>
+  </div>
+  <div class="panel">
+    <h3>Identidade</h3>
+    <p class="muted">ONL1NE BROWSER<br>Interface preta e vermelha<br>Versão 1.0</p>
+  </div>
+</section>
+
+<!-- PRIVACIDADE -->
+<section id="privacy" class="page">
+  <div class="section-title">🔒 PRIVACIDADE E CONTROLE</div>
+  <div class="panel">
+    <h3>Seus dados neste navegador</h3>
+    <p class="muted">Favoritos, histórico e perfil são armazenados localmente neste navegador usando o armazenamento do dispositivo.</p>
+    <button class="action" onclick="clearHistory()">APAGAR HISTÓRICO</button>
+    <button class="action red" onclick="clearAllData()">APAGAR DADOS LOCAIS DO ONL1NE</button>
+  </div>
+  <div class="panel">
+    <h3>Limites de privacidade</h3>
+    <p class="muted">Este painel não bloqueia todos os rastreadores, não oculta seu endereço IP e não substitui uma VPN. Sites externos têm suas próprias políticas de privacidade.</p>
+  </div>
+</section>
+
+<!-- CONFIGURAÇÕES -->
+<section id="settings" class="page">
+  <div class="section-title">⚙️ CONFIGURAÇÕES</div>
+  <div class="panel">
+    <h3>Configurações gerais</h3>
+    <button class="action" onclick="showPage('home')">Voltar ao início</button>
+    <button class="action" onclick="showPage('profile')">Editar perfil</button>
+    <button class="action" onclick="showPage('privacy')">Privacidade</button>
+  </div>
+  <div class="panel">
+    <h3>Sobre o ONL1NE</h3>
+    <p class="muted">Uma experiência personalizada de navegação, criada para funcionar no iPhone como uma aplicação web.</p>
+  </div>
+</section>
+
+</main>
+
+<nav class="bottom">
+  <button class="nav active" data-page="home" onclick="showPage('home')"><span>⌂</span>Início</button>
+  <button class="nav" data-page="bookmarks" onclick="showPage('bookmarks')"><span>★</span>Favoritos</button>
+  <button class="nav" data-page="history" onclick="showPage('history')"><span>◷</span>Histórico</button>
+  <button class="nav" data-page="games" onclick="showPage('games')"><span>🎮</span>Jogos</button>
+  <button class="nav" data-page="settings" onclick="showPage('settings')"><span>⚙</span>Ajustes</button>
+</nav>
+
+<footer>ONL1NE BROWSER • FEITO PARA VOCÊ</footer>
+
+<script>
+const getData = (key, fallback) => {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+};
+
+const saveData = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    alert("Não foi possível salvar. Verifique o armazenamento do navegador.");
+  }
+};
+
+function showPage(page) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav").forEach(b => b.classList.remove("active"));
+
+  const target = document.getElementById(page);
+  if (target) target.classList.add("active");
+
+  const nav = document.querySelector('[data-page="' + page + '"]');
+  if (nav) nav.classList.add("active");
+
+  if (page === "bookmarks") renderBookmarks();
+  if (page === "history") renderHistory();
+}
+
+function normalizeAddress(value) {
+  let address = value.trim();
+  if (!address) return "";
+
+  if (/^https?:\/\//i.test(address)) return address;
+
+  if (/^[^\s]+\.[a-z]{2,}([/:?#].*)?$/i.test(address)) {
+    return "https://" + address;
+  }
+
+  return "https://www.google.com/search?q=" + encodeURIComponent(address);
+}
+
+function searchWeb() {
+  const input = document.getElementById("searchInput");
+  const value = input.value.trim();
+
+  if (!value) {
+    input.focus();
+    return;
+  }
+
+  openSite(normalizeAddress(value), value);
+}
+
+document.getElementById("searchInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") searchWeb();
+});
+
+function openSite(url, title) {
+  const address = normalizeAddress(url);
+  if (!address) return;
+
+  try {
+    const parsed = new URL(address);
+    if (!["http:", "https:"].includes(parsed.protocol)) {
+      alert("Endereço não permitido.");
+      return;
+    }
+  } catch (e) {
+    alert("Endereço inválido.");
+    return;
+  }
+
+  let history = getData("onl_history", []);
+  history.unshift({
+    title: title || address,
+    url: address,
+    date: new Date().toLocaleString("pt-BR")
+  });
+
+  history = history.slice(0, 100);
+  saveData("onl_history", history);
+
+  const opened = window.open(address, "_blank");
+
+  if (!opened) {
+    window.location.href = address;
+  }
+}
+
+function addBookmark() {
+  const name = document.getElementById("favName").value.trim();
+  const rawUrl = document.getElementById("favUrl").value.trim();
+
+  if (!name || !rawUrl) {
+    alert("Digite o nome e o endereço do site.");
+    return;
+  }
+
+  const url = normalizeAddress(rawUrl);
+  let favorites = getData("onl_favorites", []);
+
+  if (favorites.some(f => f.url === url)) {
+    alert("Este site já está nos favoritos.");
+    return;
+  }
+
+  favorites.push({name, url});
+  saveData("onl_favorites", favorites);
+
+  document.getElementById("favName").value = "";
+  document.getElementById("favUrl").value = "";
+
+  renderBookmarks();
+  alert("Favorito salvo!");
+}
+
+function renderBookmarks() {
+  const box = document.getElementById("bookmarkList");
+  const favorites = getData("onl_favorites", []);
+
+  if (!favorites.length) {
+    box.innerHTML = '<p class="muted">Seus favoritos aparecerão aqui.</p>';
+    return;
+  }
+
+  box.innerHTML = "";
+
+  favorites.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = "item";
+
+    const info = document.createElement("div");
+    info.textContent = item.name;
+
+    const actions = document.createElement("div");
+    const open = document.createElement("button");
+    open.textContent = "ABRIR";
+    open.onclick = () => openSite(item.url, item.name);
+
+    const remove = document.createElement("button");
+    remove.textContent = "✕";
+    remove.style.marginLeft = "5px";
+    remove.onclick = () => removeBookmark(index);
+
+    actions.append(open, remove);
+    row.append(info, actions);
+    box.append(row);
+  });
+}
+
+function removeBookmark(index) {
+  let favorites = getData("onl_favorites", []);
+  favorites.splice(index, 1);
+  saveData("onl_favorites", favorites);
+  renderBookmarks();
+}
+
+function renderHistory() {
+  const box = document.getElementById("historyList");
+  const history = getData("onl_history", []);
+
+  if (!history.length) {
+    box.innerHTML = '<p class="muted">Nenhuma navegação registrada ainda.</p>';
+    return;
+  }
+
+  box.innerHTML = "";
+
+  history.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "item";
+
+    const info = document.createElement("div");
+    info.textContent = item.title + " — " + item.date;
+
+    const open = document.createElement("button");
+    open.textContent = "ABRIR";
+    open.onclick = () => openSite(item.url, item.title);
+
+    row.append(info, open);
+    box.append(row);
+  });
+}
+
+function clearHistory() {
+  if (!confirm("Deseja apagar todo o histórico do ONL1NE?")) return;
+  saveData("onl_history", []);
+  renderHistory();
+  alert("Histórico apagado.");
+}
+
+function saveProfile() {
+  const name = document.getElementById("profileName").value.trim();
+  if (!name) {
+    alert("Digite um nome para o perfil.");
+    return;
+  }
+  saveData("onl_profile", name);
+  document.getElementById("profileMessage").textContent =
+    "Perfil salvo: " + name;
+}
+
+function saveGameName() {
+  const name = document.getElementById("gameName").value.trim();
+  if (!name) {
+    alert("Digite um nome para o perfil gamer.");
+    return;
+  }
+  saveData("onl_game_profile", name);
+  document.getElementById("gameProfile").textContent =
+    "Perfil gamer ativo: " + name;
+}
+
+function clearAllData() {
+  if (!confirm("Isso apagará favoritos, histórico e perfis salvos no ONL1NE. Continuar?")) return;
+
+  ["onl_history", "onl_favorites", "onl_profile", "onl_game_profile"]
+    .forEach(key => localStorage.removeItem(key));
+
+  renderBookmarks();
+  renderHistory();
+
+  document.getElementById("profileMessage").textContent = "";
+  document.getElementById("gameProfile").textContent = "";
+
+  alert("Dados locais do ONL1NE apagados.");
+}
+
+function loadProfiles() {
+  const profile = getData("onl_profile", "");
+  const gamer = getData("onl_game_profile", "");
+
+  document.getElementById("profileName").value = profile;
+  document.getElementById("gameName").value = gamer;
+
+  if (profile) {
+    document.getElementById("profileMessage").textContent =
+      "Perfil salvo: " + profile;
+  }
+
+  if (gamer) {
+    document.getElementById("gameProfile").textContent =
+      "Perfil gamer ativo: " + gamer;
+  }
+}
+
+loadProfiles();
+renderBookmarks();
+renderHistory();
+</script>
+
+</body>
+</html>
