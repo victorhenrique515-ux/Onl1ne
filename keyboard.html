@@ -3,201 +3,99 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080808">
 <title>ONL1NE KEYBOARD</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080808;color:#fff;font-family:Arial,sans-serif}
-header{text-align:center;padding:24px 12px;border-bottom:1px solid #ed1738}
-h1{font-size:27px;letter-spacing:3px;margin:0}
+body{margin:0;background:#080808;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:25px;border-bottom:1px solid #ed1738}
+h1{letter-spacing:3px}
 h1 span{color:#ed1738}
-header p{color:#aaa}
-main{max-width:650px;margin:auto;padding:14px}
-.card{background:#17171b;border:1px solid #393039;border-radius:14px;padding:16px;margin:14px 0}
-h2{color:#ed1738;font-size:19px}
+main{max-width:600px;margin:auto;padding:16px}
+.card{background:#17171b;border:1px solid #393039;border-radius:15px;padding:18px;margin:15px 0}
+h2{color:#ed1738}
 p{color:#bbb;line-height:1.5}
-.keyrow{display:grid;grid-template-columns:1fr 115px;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #333}
-.keyrow label{font-size:14px}
-input,select{width:100%;padding:12px;background:#090909;color:white;border:1px solid #ed1738;border-radius:8px;text-align:center;font-size:15px}
-button{background:#ed1738;color:white;border:0;padding:13px;border-radius:9px;font-weight:bold;margin:5px 3px;cursor:pointer}
+.keyrow{display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #333}
+input{width:100%;padding:12px;background:#090909;color:white;border:1px solid #ed1738;border-radius:8px;text-align:center}
+button{background:#ed1738;color:white;border:0;padding:13px;border-radius:9px;font-weight:bold;margin:5px 3px}
 .secondary{background:#333}
-.status{color:#59df91;min-height:20px}
-.small{font-size:12px;color:#999}
-.actions{display:flex;flex-wrap:wrap;gap:5px}
-.actions button{flex:1}
+.status{color:#55df91}
 </style>
 </head>
 <body>
 <header>
 <h1>ONL<span>1</span>NE KEYBOARD</h1>
-<p>SEU MAPA DE TECLADO</p>
+<p>CONFIGURAÇÃO DE TECLADO</p>
 </header>
 <main>
-
 <div class="card">
-<h2>Configuração de teclas</h2>
-<p>Toque no campo de cada ação e digite a tecla que deseja utilizar.</p>
-<div id="keyList"></div>
-<div class="actions">
-<button id="save">SALVAR</button>
-<button class="secondary" id="reset">RESTAURAR</button>
+<h2>Meu teclado Bluetooth</h2>
+<p>Personalize suas teclas de referência para jogar.</p>
+<div id="keys"></div>
+<button id="save">SALVAR CONFIGURAÇÃO</button>
+<button class="secondary" id="reset">RESTAURAR PADRÃO</button>
+<p id="status" class="status"></p>
 </div>
-<p id="status" class="status" aria-live="polite"></p>
-</div>
-
 <div class="card">
-<h2>Perfis de teclado</h2>
-<input id="profileName" type="text" placeholder="Nome do perfil">
-<div class="actions">
-<button id="saveProfile">SALVAR PERFIL</button>
+<h2>Informações</h2>
+<p>As teclas abaixo são apenas um mapa de referência. O funcionamento no Free Fire depende da compatibilidade do jogo e do iPhone com teclado externo.</p>
 </div>
-<div id="profileList"></div>
-</div>
-
-<div class="card">
-<h2>Compatibilidade</h2>
-<p>Este painel salva e organiza suas preferências de teclas no navegador. Ele não conecta o teclado ao Free Fire nem altera os controles do jogo.</p>
-<p class="small">O reconhecimento das teclas depende do suporte oferecido pelo iPhone e pelo próprio jogo. Não há garantia de funcionamento dentro do Free Fire.</p>
-</div>
-
 </main>
 <script>
 (function(){
-'use strict';
-
 const defaults={
-'Andar para frente':'W',
-'Andar para trás':'S',
-'Andar para esquerda':'A',
-'Andar para direita':'D',
-'Pular':'SPACE',
+'Frente':'W',
+'Trás':'S',
+'Esquerda':'A',
+'Direita':'D',
+'Pular':'ESPAÇO',
 'Agachar':'C',
 'Correr':'SHIFT',
 'Atirar':'J',
 'Mirar':'K',
 'Recarregar':'R',
 'Trocar arma':'Q',
-'Parede de gel':'G',
-'Interagir':'E'
+'Parede de gel':'G'
 };
+const storageKey='onl1ne_keyboard';
+const box=document.getElementById('keys');
+const status=document.getElementById('status');
 
-const KEY='onl1ne_keyboard_v2';
-const PROFILE_KEY='onl1ne_keyboard_profiles_v2';
-const $=id=>document.getElementById(id);
-const list=$('keyList');
-
-function read(key,fallback){
+function load(){
 try{
-const data=localStorage.getItem(key);
-return data?JSON.parse(data):fallback;
-}catch(error){
-return fallback;
+return JSON.parse(localStorage.getItem(storageKey))||defaults;
+}catch(e){
+return defaults;
 }
-}
-
-function save(key,value){
-try{
-localStorage.setItem(key,JSON.stringify(value));
-return true;
-}catch(error){
-$('status').textContent='Não foi possível salvar. Verifique o armazenamento do navegador.';
-return false;
-}
-}
-
-function clean(value){
-return String(value).replace(/[&<>"']/g,char=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
-}[char]));
 }
 
 function render(values){
-list.innerHTML=Object.entries(defaults).map(([action,standard])=>{
-const current=values[action]||standard;
-return '<div class="keyrow"><label>'+clean(action)+'</label>'+
-'<input type="text" maxlength="12" autocomplete="off" autocapitalize="characters" data-action="'+clean(action)+'" value="'+clean(current)+'"></div>';
-}).join('');
+box.innerHTML=Object.keys(defaults).map(action=>
+'<div class="keyrow"><label>'+action+'</label>'+
+'<input type="text" maxlength="12" data-action="'+action+'"></div>'
+).join('');
+box.querySelectorAll('input').forEach(input=>{
+input.value=values[input.dataset.action]||defaults[input.dataset.action];
+});
 }
 
-function getValues(){
+document.getElementById('save').addEventListener('click',()=>{
 const values={};
-list.querySelectorAll('input').forEach(input=>{
+box.querySelectorAll('input').forEach(input=>{
 values[input.dataset.action]=input.value.trim().toUpperCase()||defaults[input.dataset.action];
 });
-return values;
-}
+localStorage.setItem(storageKey,JSON.stringify(values));
+status.textContent='Configuração salva com sucesso!';
+});
 
-function saveCurrent(){
-const ok=save(KEY,getValues());
-if(ok)$('status').textContent='Configurações salvas neste iPhone!';
-}
-
-render(read(KEY,defaults));
-
-$('save').addEventListener('click',saveCurrent);
-
-$('reset').addEventListener('click',()=>{
+document.getElementById('reset').addEventListener('click',()=>{
 render(defaults);
-save(KEY,defaults);
-$('status').textContent='Configuração padrão restaurada!';
+localStorage.setItem(storageKey,JSON.stringify(defaults));
+status.textContent='Teclas padrão restauradas!';
 });
 
-list.addEventListener('change',()=>{
-save(KEY,getValues());
-$('status').textContent='Alteração salva automaticamente!';
-});
-
-function showProfiles(){
-const profiles=read(PROFILE_KEY,[]);
-$('profileList').innerHTML=profiles.length?profiles.map((profile,index)=>
-'<div class="keyrow"><label>'+clean(profile.name)+'</label>'+
-'<div><button type="button" data-load="'+index+'">ABRIR</button>'+
-'<button type="button" class="secondary" data-delete="'+index+'">X</button></div></div>'
-).join(''):'<p class="small">Nenhum perfil salvo.</p>';
-}
-
-$('saveProfile').addEventListener('click',()=>{
-const name=$('profileName').value.trim();
-if(!name){
-$('status').textContent='Digite um nome para o perfil.';
-return;
-}
-const profiles=read(PROFILE_KEY,[]);
-profiles.push({name:name,keys:getValues()});
-if(save(PROFILE_KEY,profiles)){
-$('profileName').value='';
-showProfiles();
-$('status').textContent='Perfil salvo com sucesso!';
-}
-});
-
-$('profileList').addEventListener('click',event=>{
-const loadButton=event.target.closest('[data-load]');
-const deleteButton=event.target.closest('[data-delete]');
-if(loadButton){
-const profiles=read(PROFILE_KEY,[]);
-const profile=profiles[Number(loadButton.dataset.load)];
-if(profile){
-render(profile.keys);
-save(KEY,profile.keys);
-$('status').textContent='Perfil carregado!';
-}
-}
-if(deleteButton){
-const profiles=read(PROFILE_KEY,[]);
-profiles.splice(Number(deleteButton.dataset.delete),1);
-save(PROFILE_KEY,profiles);
-showProfiles();
-$('status').textContent='Perfil excluído!';
-}
-});
-
-showProfiles();
+render(load());
 })();
 </script>
 </body>
