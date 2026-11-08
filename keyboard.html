@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090909">
+<title>ONL1NE KEYBOARD</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090909;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:25px 12px;background:#111;border-bottom:2px solid #e00025}
+header h1{color:#ff1838;margin:0;font-size:27px;letter-spacing:2px}
+header p{color:#aaa;font-size:12px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:12px}
+button{background:#1b1b1b;color:white;border:1px solid #a90020;border-radius:9px;padding:12px 7px;font-weight:bold;cursor:pointer}
+button:active{background:#bd0025}
+main{padding:12px;max-width:650px;margin:auto}
+.secao{display:none}
+.secao.ativa{display:block}
+.card{background:#151515;border:1px solid #333;border-left:3px solid #e00025;border-radius:12px;padding:15px;margin-bottom:13px}
+h2{color:#ff2342;font-size:19px}
+h3{font-size:15px}
+p,.nota{color:#bbb;font-size:13px;line-height:1.5}
+input,select{width:100%;background:#090909;color:white;border:1px solid #555;border-radius:8px;padding:12px;margin:6px 0}
+input[type=range]{padding:0;accent-color:#ed1535}
+.linha{display:grid;grid-template-columns:1fr 90px;gap:10px;align-items:center}
+.linha input{margin:5px 0}
+.valor{color:#ff2948;text-align:center;font-weight:bold}
+.principal{background:#d00028;width:100%;border:0;margin-top:8px}
+.perigo{border-color:#e00025;color:#ff5269}
+.item{padding:9px 0;border-bottom:1px solid #333}
+footer{text-align:center;color:#666;padding:25px;font-size:11px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>ONL1NE KEYBOARD</h1>
+<p>PAINEL UNIVERSAL DE CONFIGURAÇÃO</p>
+</header>
+
+<nav>
+<button onclick="abrir('inicio')">Início</button>
+<button onclick="abrir('jogos')">Jogos</button>
+<button onclick="abrir('teclas')">Teclas</button>
+<button onclick="abrir('hud')">Editor HUD</button>
+<button onclick="abrir('sensibilidade')">Sensibilidade</button>
+<button onclick="abrir('perfis')">Perfis</button>
+<button onclick="abrir('treino')">Treinamento</button>
+<button onclick="abrir('bluetooth')">Bluetooth</button>
+<button onclick="abrir('ajuda')">Ajuda</button>
+</nav>
+
+<main>
+
+<section id="inicio" class="secao ativa">
+<div class="card">
+<h2>Bem-vindo ao ONL1NE</h2>
+<p>Seu espaço para organizar configurações de teclado, HUD e perfis de vários jogos.</p>
+<button class="principal" onclick="abrir('jogos')">ESCOLHER UM JOGO</button>
+</div>
+<div class="card">
+<h3>Resumo do painel</h3>
+<p id="resumo">Suas configurações ficam salvas neste aparelho.</p>
+</div>
+</section>
+
+<section id="jogos" class="secao">
+<div class="card">
+<h2>Biblioteca de jogos</h2>
+<select id="jogo">
+<option>Free Fire</option>
+<option>Roblox</option>
+<option>Minecraft</option>
+<option>PUBG Mobile</option>
+<option>Call of Duty Mobile</option>
+<option>Outro jogo</option>
+</select>
+<button class="principal" onclick="selecionarJogo()">Selecionar jogo</button>
+<p id="jogoAtual">Jogo selecionado: Free Fire</p>
+<h3>Adicionar outro jogo</h3>
+<input id="novoJogo" placeholder="Digite o nome do jogo">
+<button onclick="adicionarJogo()">Adicionar à biblioteca</button>
+<div id="listaJogos"></div>
+</div>
+</section>
+
+<section id="teclas" class="secao">
+<div class="card">
+<h2>Configuração de teclas</h2>
+<p>Personalize os comandos do seu perfil.</p>
+<div id="listaTeclas"></div>
+<button class="principal" onclick="salvarTeclas()">SALVAR TECLAS</button>
+<button onclick="restaurarTeclas()">Restaurar padrão</button>
+</div>
+</section>
+
+<section id="hud" class="secao">
+<div class="card">
+<h2>Editor de HUD</h2>
+<p>Organize os comandos e suas posições de referência.</p>
+<div id="listaHud"></div>
+<button class="principal" onclick="salvarHUD()">SALVAR HUD</button>
+</div>
+</section>
+
+<section id="sensibilidade" class="secao">
+<div class="card">
+<h2>Laboratório de sensibilidade</h2>
+<div id="listaSens"></div>
+<button class="principal" onclick="salvarSens()">SALVAR SENSIBILIDADE</button>
+</div>
+</section>
+
+<section id="perfis" class="secao">
+<div class="card">
+<h2>Meus perfis</h2>
+<input id="nomePerfil" placeholder="Nome do novo perfil">
+<button class="principal" onclick="salvarPerfil()">SALVAR PERFIL ATUAL</button>
+<div id="listaPerfis"></div>
+</div>
+</section>
+
+<section id="treino" class="secao">
+<div class="card">
+<h2>Área de treinamento</h2>
+<p>Registre sua evolução manualmente.</p>
+<label>Partidas realizadas</label>
+<input type="number" id="partidas" min="0" value="0">
+<label>Vitórias</label>
+<input type="number" id="vitorias" min="0" value="0">
+<label>Observações</label>
+<input id="observacoes" placeholder="Como foi seu treino?">
+<button class="principal" onclick="salvarTreino()">SALVAR RESULTADO</button>
+<p id="resultadoTreino"></p>
+</div>
+</section>
+
+<section id="bluetooth" class="secao">
+<div class="card">
+<h2>Teclado Bluetooth</h2>
+<p>Para conectar seu teclado, abra os Ajustes do iPhone e entre em Bluetooth. Ative o teclado e faça o pareamento.</p>
+<button class="principal" onclick="window.open('App-Prefs:Bluetooth','_blank')">ABRIR AJUSTES DE BLUETOOTH</button>
+<p>O painel não consegue detectar ou controlar diretamente o teclado. A compatibilidade depende do iPhone e de cada jogo.</p>
+</div>
+</section>
+
+<section id="ajuda" class="secao">
+<div class="card">
+<h2>Central de ajuda</h2>
+<p>1. Escolha seu jogo.</p>
+<p>2. Personalize as teclas.</p>
+<p>3. Organize seu HUD.</p>
+<p>4. Ajuste sua sensibilidade.</p>
+<p>5. Salve um perfil.</p>
+<p>As configurações ficam armazenadas no navegador deste aparelho.</p>
+<p>Este painel organiza configurações, mas não injeta comandos nos jogos nem garante suporte universal a teclado externo.</p>
+</div>
+</section>
+
+</main>
+<footer>ONL1NE KEYBOARD • EDIÇÃO MULTIJOGOS</footer>
+
+<script>
+const padrao={
+"Andar para frente":"W",
+"Andar para trás":"S",
+"Andar para esquerda":"A",
+"Andar para direita":"D",
+"Pular":"ESPAÇO",
+"Agachar":"C",
+"Correr":"SHIFT",
+"Atirar":"J",
+"Mirar":"K",
+"Recarregar":"R",
+"Trocar arma":"Q",
+"Parede de gel":"G",
+"Interagir":"E"
+};
+
+let teclas=JSON.parse(localStorage.getItem("onl_teclas")||"null")||{...padrao};
+let hud=JSON.parse(localStorage.getItem("onl_hud")||"{}");
+let sens=JSON.parse(localStorage.getItem("onl_sens")||"{}");
+let perfis=JSON.parse(localStorage.getItem("onl_perfis")||"{}");
+let jogos=JSON.parse(localStorage.getItem("onl_jogos")||'["Free Fire","Roblox","Minecraft","PUBG Mobile","Call of Duty Mobile"]');
+let jogoAtual="Free Fire";
+
+function abrir(id){
+document.querySelectorAll(".secao").forEach(s=>s.classList.remove("ativa"));
+document.getElementById(id).classList.add("ativa");
+}
+
+function renderTeclas(){
+let html="";
+Object.keys(teclas).forEach((nome,i)=>{
+html+=`<div class="linha item"><label>${nome}</label><input data-tecla="${nome}" value="${teclas[nome]}" maxlength="15"></div>`;
+});
+document.getElementById("listaTeclas").innerHTML=html;
+}
+
+function salvarTeclas(){
+document.querySelectorAll("[data-tecla]").forEach(el=>teclas[el.dataset.tecla]=el.value.toUpperCase());
+localStorage.setItem("onl_teclas",JSON.stringify(teclas));
+alert("Teclas salvas com sucesso!");
+}
+
+function restaurarTeclas(){
+teclas={...padrao};
+localStorage.setItem("onl_teclas",JSON.stringify(teclas));
+renderTeclas();
+alert("Teclas restauradas!");
+}
+
+function renderHUD(){
+let html="";
+["Andar","Pular","Agachar","Correr","Atirar","Mirar","Recarregar","Interagir"].forEach(nome=>{
+html+=`<div class="item"><label>${nome}</label><input placeholder="Posição ou observação" data-hud="${nome}" value="${hud[nome]||""}"></div>`;
+});
+document.getElementById("listaHud").innerHTML=html;
+}
+
+function salvarHUD(){
+document.querySelectorAll("[data-hud]").forEach(el=>hud[el.dataset.hud]=el.value);
+localStorage.setItem("onl_hud",JSON.stringify(hud));
+alert("HUD salvo!");
+}
+
+function renderSens(){
+let html="";
+["Geral","Mira","Mira 2x","Mira 4x","Precisão","Velocidade"].forEach(nome=>{
+let valor=sens[nome]??50;
+html+=`<div class="item"><label>${nome}</label><div class="linha"><input type="range" min="0" max="100" value="${valor}" data-sens="${nome}" oninput="this.nextElementSibling.textContent=this.value"><span class="valor">${valor}</span></div></div>`;
+});
+document.getElementById("listaSens").innerHTML=html;
+}
+
+function salvarSens(){
+document.querySelectorAll("[data-sens]").forEach(el=>sens[el.dataset.sens]=Number(el.value));
+localStorage.setItem("onl_sens",JSON.stringify(sens));
+alert("Sensibilidade salva!");
+}
+
+function selecionarJogo(){
+jogoAtual=document.getElementById("jogo").value;
+document.getElementById("jogoAtual").textContent="Jogo selecionado: "+jogoAtual;
+localStorage.setItem("onl_jogo",jogoAtual);
+}
+
+function adicionarJogo(){
+let nome=document.getElementById("novoJogo").value.trim();
+if(!nome)return alert("Digite o nome do jogo.");
+if(!jogos.includes(nome))jogos.push(nome);
+localStorage.setItem("onl_jogos",JSON.stringify(jogos));
+renderJogos();
+document.getElementById("novoJogo").value="";
+}
+
+function renderJogos(){
+document.getElementById("listaJogos").innerHTML=jogos.map(j=>`<div class="item">${j}</div>`).join("");
+let select=document.getElementById("jogo");
+select.innerHTML=jogos.map(j=>`<option>${j.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")}</option>`).join("");
+}
+
+function salvarPerfil(){
+let nome=document.getElementById("nomePerfil").value.trim();
+if(!nome)return alert("Digite um nome para o perfil.");
+salvarTeclasSilencioso();
+salvarHudSilencioso();
+salvarSensSilencioso();
+perfis[nome]={teclas:{...teclas},hud:{...hud},sens:{...sens},jogo:jogoAtual};
+localStorage.setItem("onl_perfis",JSON.stringify(perfis));
+document.getElementById("nomePerfil").value="";
+renderPerfis();
+alert("Perfil salvo!");
+}
+
+function salvarTeclasSilencioso(){
+document.querySelectorAll("[data-tecla]").forEach(el=>teclas[el.dataset.tecla]=el.value.toUpperCase());
+}
+function salvarHudSilencioso(){
+document.querySelectorAll("[data-hud]").forEach(el=>hud[el.dataset.hud]=el.value);
+}
+function salvarSensSilencioso(){
+document.querySelectorAll("[data-sens]").forEach(el=>sens[el.dataset.sens]=Number(el.value));
+}
+
+function renderPerfis(){
+let html="";
+Object.keys(perfis).forEach(nome=>{
+html+=`<div class="item"><b>${nome.replaceAll("<","&lt;").replaceAll(">","&gt;")}</b><p>Jogo: ${perfis[nome].jogo}</p><button onclick="carregarPerfil('${encodeURIComponent(nome)}')">Carregar</button> <button class="perigo" onclick="excluirPerfil('${encodeURIComponent(nome)}')">Excluir</button></div>`;
+});
+document.getElementById("listaPerfis").innerHTML=html||"<p>Nenhum perfil salvo ainda.</p>";
+}
+
+function carregarPerfil(chave){
+let nome=decodeURIComponent(chave),p=perfis[nome];
+if(!p)return;
+teclas=p.teclas;hud=p.hud;sens=p.sens;jogoAtual=p.jogo;
+localStorage.setItem("onl_teclas",JSON.stringify(teclas));
+localStorage.setItem("onl_hud",JSON.stringify(hud));
+localStorage.setItem("onl_sens",JSON.stringify(sens));
+renderTeclas();renderHUD();renderSens();renderJogos();
+document.getElementById("jogoAtual").textContent="Jogo selecionado: "+jogoAtual;
+alert("Perfil carregado!");
+}
+
+function excluirPerfil(chave){
+let nome=decodeURIComponent(chave);
+if(confirm("Excluir este perfil?")){
+delete perfis[nome];
+localStorage.setItem("onl_perfis",JSON.stringify(perfis));
+renderPerfis();
+}
+}
+
+function salvarTreino(){
+let p=Number(document.getElementById("partidas").value);
+let v=Number(document.getElementById("vitorias").value);
+if(v>p)return alert("Vitórias não podem ser maiores que partidas.");
+let obs=document.getElementById("observacoes").value;
+let dados={partidas:p,vitorias:v,observacoes:obs};
+localStorage.setItem("onl_treino",JSON.stringify(dados));
+document.getElementById("resultadoTreino").textContent="Treino salvo: "+p+" partidas e "+v+" vitórias.";
+alert("Treinamento registrado!");
+}
+
+function iniciar(){
+jogoAtual=localStorage.getItem("onl_jogo")||"Free Fire";
+renderTeclas();renderHUD();renderSens();renderPerfis();renderJogos();
+document.getElementById("jogoAtual").textContent="Jogo selecionado: "+jogoAtual;
+let t=JSON.parse(localStorage.getItem("onl_treino")||"null");
+if(t){
+document.getElementById("partidas").value=t.partidas;
+document.getElementById("vitorias").value=t.vitorias;
+document.getElementById("observacoes").value=t.observacoes;
+document.getElementById("resultadoTreino").textContent=t.partidas+" partidas e "+t.vitorias+" vitórias registradas.";
+}
+document.getElementById("resumo").textContent=Object.keys(perfis).length+" perfis salvos • "+jogos.length+" jogos na biblioteca.";
+}
+iniciar();
+</script>
+</body>
+</html>
