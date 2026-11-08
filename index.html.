@@ -2,7 +2,8 @@
 
 <html lang="pt-BR">
 
-<head>
+<head><link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 
 <meta charset="UTF-8">
 
