@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090909">
+<title>ONL1NE KEYBOARD</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090909;color:white;font-family:Arial,sans-serif;padding:20px}
+header{text-align:center;margin:20px 0 30px}
+h1{color:#ff3030;letter-spacing:2px}
+section{background:#171717;border:1px solid #333;border-radius:15px;padding:16px;margin-bottom:18px}
+h2{font-size:17px;color:#ff4545}
+.status{color:#aaa;font-size:13px}
+#keyboard{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:300px;margin:20px auto}
+.key{background:#292929;border:1px solid #555;border-radius:10px;padding:18px 5px;text-align:center;font-weight:bold}
+.key.active{background:#c71919;border-color:#ff5555;box-shadow:0 0 15px #ff3030}
+button{background:#d51d1d;color:white;border:0;padding:12px;border-radius:9px;font-weight:bold}
+select,input{background:#222;color:white;border:1px solid #555;padding:10px;border-radius:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#log{color:#aaa;font-size:13px;min-height:25px}
+</style>
+</head>
+<body>
+<header>
+<h1>⚡ ONL1NE KEYBOARD</h1>
+<p>GAMING KEY MAPPER</p>
+<div class="status" id="status">Aguardando teclado Bluetooth</div>
+</header>
+
+<section>
+<h2>⌨️ MAPA DAS TECLAS</h2>
+<p class="status">Conecte seu teclado Bluetooth ao iPhone e aperte as teclas.</p>
+<div id="keyboard">
+<div class="key" data-key="W">W</div>
+<div class="key" data-key="A">A</div>
+<div class="key" data-key="S">S</div>
+<div class="key" data-key="D">D</div>
+<div class="key" data-key=" ">ESPAÇO</div>
+<div class="key" data-key="Shift">SHIFT</div>
+<div class="key" data-key="R">R</div>
+<div class="key" data-key="F">F</div>
+<div class="key" data-key="E">E</div>
+</div>
+<div id="log">Nenhuma tecla pressionada.</div>
+</section>
+
+<section>
+<h2>🎮 PERFIL DE JOGO</h2>
+<select id="profile">
+<option>Free Fire</option>
+<option>Jogo personalizado</option>
+</select>
+<p class="status">Perfil visual para organizar seus comandos.</p>
+</section>
+
+<section>
+<h2>🛠️ CONFIGURAR TECLA</h2>
+<div class="row">
+<select id="selectedKey">
+<option>W</option><option>A</option><option>S</option>
+<option>D</option><option>ESPAÇO</option>
+<option>SHIFT</option><option>R</option><option>F</option><option>E</option>
+</select>
+<select id="action">
+<option>Movimentar para frente</option>
+<option>Movimentar para esquerda</option>
+<option>Movimentar para trás</option>
+<option>Movimentar para direita</option>
+<option>Pular</option>
+<option>Correr</option>
+<option>Recarregar</option>
+<option>Interagir</option>
+</select>
+<button onclick="saveMapping()">Salvar</button>
+</div>
+<div id="mappings" class="status" style="margin-top:15px">Nenhum comando configurado.</div>
+</section>
+
+<section>
+<h2>📡 TESTE DO TECLADO</h2>
+<p class="status">Clique no botão e depois aperte uma tecla física.</p>
+<button onclick="startTest()">Iniciar teste</button>
+<button onclick="stopTest()">Parar</button>
+</section>
+
+<p class="status" style="text-align:center">ONL1NE KEYBOARD • PROJETO INDEPENDENTE</p>
+
+<script>
+let testing=false;
+let mappings={};
+
+function startTest(){
+ testing=true;
+ document.getElementById("status").textContent="Teste ativo: aperte uma tecla";
+ document.body.tabIndex=0;
+ document.body.focus();
+}
+
+function stopTest(){
+ testing=false;
+ document.getElementById("status").textContent="Teste pausado";
+}
+
+document.addEventListener("keydown",function(e){
+ if(!testing)return;
+ let k=e.key===" "?" ":e.key.length===1?e.key.toUpperCase():e.key;
+ let el=document.querySelector('[data-key="'+CSS.escape(k)+'"]');
+ if(el)el.classList.add("active");
+ document.getElementById("log").textContent="Tecla detectada: "+(k===" "?"ESPAÇO":k);
+});
+
+document.addEventListener("keyup",function(e){
+ let k=e.key===" "?" ":e.key.length===1?e.key.toUpperCase():e.key;
+ let el=document.querySelector('[data-key="'+CSS.escape(k)+'"]');
+ if(el)el.classList.remove("active");
+});
+
+function saveMapping(){
+ let key=document.getElementById("selectedKey").value;
+ let action=document.getElementById("action").value;
+ mappings[key]=action;
+ document.getElementById("mappings").innerHTML=
+ Object.entries(mappings).map(([k,v])=>k+" → "+v).join("<br>");
+}
+</script>
+</body>
+</html>
