@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080808">
+<title>ONL1NE</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080808;color:white;font-family:Arial,sans-serif}
+header{text-align:center;padding:25px;border-bottom:1px solid #ed1738}
+.logo{font-size:34px;font-weight:900;letter-spacing:4px}
+.logo span{color:#ed1738}
+main{padding:15px;max-width:650px;margin:auto}
+nav{display:flex;flex-wrap:wrap;gap:7px}
+button{background:#ed1738;color:white;border:0;padding:12px;border-radius:9px;font-weight:bold}
+nav button{flex:1;min-width:90px}
+nav button.active{background:white;color:#ed1738}
+section{display:none}
+section.active{display:block}
+.card{background:#17171b;border:1px solid #393039;border-radius:15px;padding:17px;margin-top:15px}
+h2{color:#ed1738}
+p{color:#bbb;line-height:1.5}
+label{display:block;margin:18px 0 8px}
+input[type=range]{width:100%;accent-color:#ed1738}
+input[type=text],input[type=number]{width:100%;padding:12px;background:#090909;color:white;border:1px solid #555;border-radius:8px}
+.item{padding:12px;border-bottom:1px solid #333}
+.item input{accent-color:#ed1738}
+.small{font-size:13px;color:#aaa}
+.secondary{background:#333;margin:5px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">ONL<span>1</span>NE</div>
+<p>SEU PAINEL • SUA EVOLUÇÃO</p>
+</header>
+<main>
+<nav>
+<button class="active" data-page="inicio">Início</button>
+<button data-page="hud">HUD</button>
+<button data-page="sens">Sensibilidade</button>
+<button data-page="treino">Treinamento</button>
+<button data-page="perfis">Perfis</button>
+</nav>
+
+<section id="inicio" class="active">
+<div class="card">
+<h2>Bem-vindo ao ONL1NE</h2>
+<p>Seu painel para organizar configurações e acompanhar sua evolução.</p>
+</div>
+</section>
+
+<section id="hud">
+<div class="card">
+<h2>Organizar HUD</h2>
+<p>Marque os itens que deseja ajustar.</p>
+<div id="hudlist"></div>
+<button id="saveHUD">Salvar HUD</button>
+<p id="hudStatus"></p>
+</div>
+</section>
+
+<section id="sens">
+<div class="card">
+<h2>Sensibilidade</h2>
+<div id="sliders"></div>
+<button id="saveSens">Salvar configuração</button>
+<p id="sensStatus"></p>
+</div>
+</section>
+
+<section id="treino">
+<div class="card">
+<h2>Meu treinamento</h2>
+<label for="minutes">Minutos treinados</label>
+<input id="minutes" type="number" min="1" value="15">
+<label for="result">Resultado</label>
+<input id="result" type="text" placeholder="Ex.: Bom desempenho">
+<p><button id="addTraining">Registrar treino</button></p>
+<div id="history"></div>
+</div>
+</section>
+
+<section id="perfis">
+<div class="card">
+<h2>Meus perfis</h2>
+<input id="profileName" type="text" placeholder="Nome do perfil">
+<p><button id="saveProfile">Salvar perfil</button></p>
+<div id="profiles"></div>
+</div>
+</section>
+</main>
+
+<script>
+(function(){
+const defaults={Geral:90,Vermelho:85,Mira2x:80,Mira4x:75,AWM:40,Olhadinha:70};
+const $=id=>document.getElementById(id);
+
+function read(key,fallback){
+try{return JSON.parse(localStorage.getItem('onl1ne_'+key))??fallback}
+catch(e){return fallback}
+}
+function write(key,value){
+localStorage.setItem('onl1ne_'+key,JSON.stringify(value));
+}
+
+document.querySelectorAll('nav button').forEach(button=>{
+button.addEventListener('click',()=>{
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+button.classList.add('active');
+$(button.dataset.page).classList.add('active');
+});
+});
+
+const items=['Botão de tiro','Mira','Pular','Agachar','Parede de gel'];
+const saved=read('hud',[]);
+$('hudlist').innerHTML=items.map(item=>
+'<div class="item"><label><input type="checkbox" value="'+item+'" '+(saved.includes(item)?'checked':'')+'> '+item+'</label></div>'
+).join('');
+
+$('saveHUD').addEventListener('click',()=>{
+const selected=[...document.querySelectorAll('#hudlist input:checked')].map(x=>x.value);
+write('hud',selected);
+$('hudStatus').textContent='HUD salvo com sucesso!';
+});
+
+function renderSens(values){
+values=values||read('sens',defaults);
+$('sliders').innerHTML=Object.keys(defaults).map(key=>
+'<label>'+key+': <b id="value_'+key+'">'+(values[key]??defaults[key])+'</b></label>'+
+'<input type="range" min="0" max="200" value="'+(values[key]??defaults[key])+'" id="slider_'+key+'">'
+).join('');
+
+Object.keys(defaults).forEach(key=>{
+$('slider_'+key).addEventListener('input',event=>{
+$('value_'+key).textContent=event.target.value;
+});
+});
+}
+
+renderSens();
+
+$('saveSens').addEventListener('click',()=>{
+const values={};
+Object.keys(defaults).forEach(key=>{
+values[key]=Number($('slider_'+key).value);
+});
+write('sens',values);
+$('sensStatus').textContent='Sensibilidade salva com sucesso!';
+});
+
+function escapeText(value){
+return String(value).replace(/[&<>"']/g,c=>({
+'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+}[c]));
+}
+
+function showTraining(){
+const entries=read('training',[]);
+$('history').innerHTML=entries.length?
+entries.map(x=>'<div class="item">'+escapeText(x.date)+' — '+escapeText(x.minutes)+' min — '+escapeText(x.result)+'</div>').join(''):
+'<p class="small">Nenhum treino registrado ainda.</p>';
+}
+
+$('addTraining').addEventListener('click',()=>{
+const minutes=Number($('minutes').value);
+if(minutes<1){alert('Informe os minutos treinados.');return;}
+const entries=read('training',[]);
+entries.unshift({
+minutes:minutes,
+result:$('result').value.trim()||'Treino concluído',
+date:new Date().toLocaleDateString('pt-BR')
+});
+write('training',entries);
+$('result').value='';
+showTraining();
+});
+
+function showProfiles(){
+const profiles=read('profiles',[]);
+$('profiles').innerHTML=profiles.length?
+profiles.map((p,i)=>
+'<div class="item"><b>'+escapeText(p.name)+'</b><br>'+
+'<button class="secondary" data-load="'+i+'">Carregar</button>'+
+'<button class="secondary" data-delete="'+i+'">Excluir</button></div>'
+).join(''):
+'<p class="small">Nenhum perfil salvo ainda.</p>';
+
+$('profiles').querySelectorAll('[data-load]').forEach(button=>{
+button.addEventListener('click',()=>{
+const profile=read('profiles',[])[Number(button.dataset.load)];
+if(profile){
+write('sens',profile.sens);
+renderSens(profile.sens);
+document.querySelector('[data-page="sens"]').click();
+}
+});
+});
+
+$('profiles').querySelectorAll('[data-delete]').forEach(button=>{
+button.addEventListener('click',()=>{
+const list=read('profiles',[]);
+list.splice(Number(button.dataset.delete),1);
+write('profiles',list);
+showProfiles();
+});
+});
+}
+
+$('saveProfile').addEventListener('click',()=>{
+const name=$('profileName').value.trim();
+if(!name){alert('Digite um nome para o perfil.');return;}
+const sens={};
+Object.keys(defaults).forEach(key=>{
+sens[key]=Number($('slider_'+key).value);
+});
+const profiles=read('profiles',[]);
+profiles.push({name:name,sens:sens});
+write('profiles',profiles);
+$('profileName').value='';
+showProfiles();
+});
+
+showTraining();
+showProfiles();
+})();
+</script>
+</body>
+</html>
