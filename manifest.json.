@@ -1,1 +1,18 @@
-
+{
+  "name": "ONL1NE",
+  "short_name": "ONL1NE",
+  "description": "Painel pessoal de configurações e treinamento",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
